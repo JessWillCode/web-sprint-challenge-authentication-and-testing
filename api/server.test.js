@@ -36,26 +36,30 @@ describe('server endpoints', () => {
   expect(res.body).toHaveProperty('username', "Loki");
 })
 
-it('[POST] /login should return welcome message', async () => {
+it('[POST] /login should return error message on failed login', async () => {
   let res =await request(server)
   .post('/api/auth/login')
   .send({username: 'Loki', password: 'foobar' });
 
-  expect(res.body).toBe({
-    message: "welcome, Loki",
-  });
+  expect(res.body).toMatchObject({ message: 'Invalid credentials'});
 })
 
-it('[POST] /login should return error message on failed login', async () => {
-  let res =await request(server).post('/login');
+it('[POST] /login should return error message if no username or password is entered', async () => {
+  let res =await request(server)
+  .post('/api/auth/login')
+  .send({username: 'Loki'});
+
+  expect(res.body).toMatchObject({ message: 'username and password required'});
 })
 
-// it('[GET] / should show jokes on successful login', async () => {
-//   let res =await request(server).verb('/');
-// })
+it('[GET] / should show jokes on successful login', async () => {
+  let res = await request(server).get('/api/jokes');
 
-// it('[GET] / does not show jokes ', async () => {
-//   let res =await request(server).verb('/');
-// })
+})
+
+it('[GET] / does not show jokes ', async () => {
+  let res = await request(server).get('/api/jokes');
+
+})
 
 })
