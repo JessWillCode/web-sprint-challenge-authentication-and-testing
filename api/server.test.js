@@ -1,4 +1,3 @@
-const User = require('../users/users-model');
 const db = require('../data/dbConfig');
 const request = require('supertest');
 const server = require('./server');
@@ -52,14 +51,9 @@ it('[POST] /login should return error message if no username or password is ente
   expect(res.body).toMatchObject({ message: 'username and password required'});
 })
 
-it('[GET] / should show jokes on successful login', async () => {
-  let res = await request(server).get('/api/jokes');
-
-})
-
 it('[GET] / does not show jokes ', async () => {
   let res = await request(server).get('/api/jokes');
-
+  expect(res.body).toMatchObject({message: "token required"})
 })
 
 })
