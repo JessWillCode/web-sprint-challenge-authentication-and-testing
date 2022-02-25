@@ -25,6 +25,10 @@ async function checkUsernameFree(req,res,next) {
     if(users.length) {
       req.user = users[0]
       next();
+    } else if(!req.body.username || !req.body.password) {
+      res.status(401).json({
+          message: 'username and password required'
+      })
     } else {
       res.status(401).json({
         message: 'Invalid credentials'

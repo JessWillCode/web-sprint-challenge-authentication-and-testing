@@ -9,7 +9,7 @@ const { checkUsernameFree,
 const { BCRYPT_ROUNDS, JWT_SECRET } = require('../../config');
 
 router.post('/register',checkUsernameFree, (req, res, next) => {
-  let { username, password, id } = req.body;
+  let { username, password } = req.body;
 
   const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS)
 
@@ -46,7 +46,19 @@ router.post('/register',checkUsernameFree, (req, res, next) => {
 });
 
 router.post('/login', checkUsernameExists, (req, res, next) => {
-  res.json('hello I want to login');
+  let { username, password } = req.body;
+
+  User.findBy({ username })
+  .then(([user]) => {
+    if(user && bcrypt.compareSync(password, user.password)) {
+      const token = generateToken(user);
+      res.status(200).json({
+        message: `welcome, ${user.username}`,
+        token
+      })
+    }
+  })
+  .catch(next)
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
