@@ -1,8 +1,8 @@
 const db = require('../data/dbConfig');
 
 function findBy(filter) {
-    return db("users as u")
-      .select("u.id", "u.username", "u.password")
+    return db("users")
+      .select("id", "username", "password")
       .where(filter)
   }
   
@@ -12,9 +12,9 @@ function findBy(filter) {
   }
   
   function findById(id) {
-    return db("users as u")
-      .select("u.id", "u.username")
-      .where("u.id", id)
+    return db("users")
+      .select("id", "username", "password")
+      .where("id", id)
       .first()
   }
 
