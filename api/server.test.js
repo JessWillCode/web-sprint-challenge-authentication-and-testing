@@ -56,4 +56,9 @@ it('[GET] / does not show jokes ', async () => {
   expect(res.body).toMatchObject({message: "token required"})
 })
 
+it('[GET] / shows correct status on failed login ', async () => {
+  let res = await request(server).get('/api/jokes');
+  expect(res.status).toBe(401);
+})
+
 })
